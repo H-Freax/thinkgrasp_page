@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="A Vision-Language System for Strategic Part Grasping in Clutter">
+  <meta name="keywords" content="Robotic Grasping, Vision-Language Models, Language Conditioned Grasping">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ThinkGrasp</title>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true}, "HTML-CSS": {minScaleAdjust: 100} });
+  </script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4V4THBXWQ4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4V4THBXWQ4');
+</script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <!-- <div class="navbar-brand"> -->
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://h-freax.github.io/">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <!-- <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Related Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://haojhuang.github.io/etp_page/">
+            Equivairant Transporter Net
+          </a>
+          <a class="navbar-item" href="https://arxiv.org/abs/2308.07948">
+            Leveraging Symmetries in Pick and Place
+          </a>
+          <a class="navbar-item" href="https://haojhuang.github.io/edge_grasp_page/">
+            Edge Grasp Network
+          </a>
+          <a class="navbar-item" href="https://haojhuang.github.io/fourtran_page/">
+            Fourier Transporter
+          </a>
+        </div>
+      </div> -->
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            <img src="static/images/favicon.png" alt="ThinkGrasp" class="h-[1em] inline align-[-0.1em]" style="width: 50px;">
+
+            ThinkGrasp: A Vision-Language System for Strategic Part Grasping in Clutter </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://h-freax.github.io/">Yaoyao Qian</a><sup>1</sup>,</span>
+            <span class="author-block">
+                <a href="https://zxp-s-works.github.io/">Xupeng Zhu</a><sup>1</sup>,</span>
+            <span class="author-block">
+                  <a href="https://ondrejbiza.com/#">Ondrej Biza</a><sup>12</sup>,
+                </span>
+            <span class="author-block">
+                    <a href="https://scholar.google.com/citations?user=VAZsaWUAAAAJ&hl=en">Shuo Jiang</a><sup>1</sup>,</span>
+
+            <span class="author-block">
+                    <a href="https://lfzhao.com/">Linfeng Zhao</a><sup>1</sup>,</span>
+
+            <span class="author-block">
+              <a href="https://haojhuang.github.io/">Haojie Huang</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/yu-qi-66668b263/">Yu Qi</a><sup>1</sup>,</span>
+
+
+            <span class="author-block">
+              <a href="https://helpinghandslab.netlify.app/people/">Robert Platt</a><sup>12</sup>
+            </span>
+
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <div class="author-block"><sup>1</sup>Northeastern Univeristy, Boston, MA 02115</div>
+
+            <div>
+            <span class="author-block"><sup>2</sup>Boston Dynamics AI Institute, </span>
+            </div>
+
+            <!-- <div> -->
+            <!-- <span class="author-block"><sup>$\dagger$, $\ddagger$</sup>equal conrtibution, </span> -->
+
+            <!-- <span class="author-block"><sup>$\star$</sup>equally advising</span> -->
+            <!-- </div> -->
+            <!-- <div> <b>ICLR 2024</b><div> -->
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <!-- <span class="link-block">
+                <a href="https://openreview.net/forum?id=UulwvAU1W0"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span> -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=o5QHFhI95Qo"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code(Coming Soon)</span>
+                  </a>
+              </span>
+              <!-- Dataset Link.
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div style="text-align: center;">
+  <img src="./static/images/intro.png" alt="System Introduction" style="width: 90%;">
+</div>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Robotic grasping in cluttered environments remains a significant challenge due to occlusions and complex object arrangements. We have developed $\text{ThinkGrasp}$, a plug-and-play vision-language grasping system that makes use of GPT-4o's advanced contextual reasoning for heavy clutter environment grasping strategies. $\text{ThinkGrasp}$ can effectively identify and generate grasp poses for target objects, even when they are heavily obstructed or nearly invisible, by using goal-oriented language to guide the removal of obstructing objects. This approach progressively uncovers the target object and ultimately grasps it with a few steps and a high success rate. In both simulated and real experiments, $\text{ThinkGrasp}$ achieved a high success rate and significantly outperformed state-of-the-art methods in heavily cluttered environments or with diverse unseen objects, demonstrating strong generalization capabilities.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/watch?v=o5QHFhI95Qo"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Introduction</h2>
+        <div class="content has-text-justified">
+          <p>
+            We have developed a <b>plug-and-play system</b> for <b>occlusion handling</b> that efficiently utilizes <b>visual</b> and <b>language information</b> to assist in robotic grasping. To improve reliability, we have implemented a <b>robust error-handling framework</b> using <b>LangSAM</b> and <b>VLPart</b> for segmentation. While <b>GPT-4o</b> provides the target object name, <b>LangSAM</b> and <b>VLPart</b> handle the image segmentation. This division of tasks ensures that any errors from the language model do not affect the segmentation process, leading to <b>higher success rates</b> and <b>safer grasp poses</b> in diverse and cluttered environments.
+          </p>
+
+          <p>
+            Our system's <b>modular design</b> enables <b>easy integration</b> into various robotic platforms and grasping systems. It is compatible with <b>6-DoF two-finger grippers</b>, demonstrating strong <b>generalization capabilities</b>. It quickly adapts to new language goals and novel objects through simple prompts, making it <b>highly versatile</b> and <b>scalable</b>.
+          </p>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- System Pipeline. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">System Pipeline</h2>
+        <div class="content has-text-justified">
+          <img src="./static/images/closeloop.png" alt="Closed Loop Process" style="width: 90%;">
+          <!-- <p><i>Closed-loop process for ThinkGrasp.</i></p> -->
+          <p>
+            Our system uses an iterative pipeline for grasping in cluttered environments. Given an initial RGB-D scene observation ($224{\times}224$ for simulation, $640{\times}480$ for real robot) and a natural language instruction:
+          </p>
+          <p>
+            First, <b>GPT-4o</b> performs "<b>imagine segmentation</b>", analyzing the scene and instruction to identify potential target objects or parts. GPT-4o suggests grasp locations by proposing specific points within a $3{\times}3$ grid, focusing on the safest and most advantageous parts for grasping.
+          </p>
+          <p>
+            The system then uses either <b>LangSAM</b> or <b>VLPart</b> for segmentation, based on whether the target is an object or a part. GPT-4o adjusts its selections based on new visual input after each grasp, updating predictions for the target object and preferred grasping location.
+          </p>
+          <p>
+            To determine the optimal grasping pose, the system generates candidate poses from the cropped point cloud. We used <b>Graspnet-1Billion</b> for simulations and <b>FGC-Graspnet</b> for real-robot tests to ensure consistent results. The candidate poses are evaluated based on proximity to the preferred location and grasp quality scores.
+          </p>
+          <p>
+            This closed-loop process allows the system to adapt its strategy based on updated observations after each grasp attempt, effectively managing heavy clutter until the task is completed or the maximum number of iterations is reached.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            We evaluated $\text{ThinkGrasp}$ in a simulation environment using a UR5 arm, ROBOTIQ-85 gripper, and Intel RealSense L515 camera. Images were resized to 224x224 pixels and segmented by LangSAM for precise object masks. We compared our solution with Vision-Language Grasping (VLG) and OVGrasp, using the same GraspNet backbone for fair comparison. Additionally, we tested the performance of directly using GPT-4o to select grasp points.
+          </p>
+          <figure>
+            <img src="./static/images/cluttersimulation_case.png" alt="Clutter Simulation Case">
+            <figcaption>Figure 1: Clutter simulation case.</figcaption>
+          </figure>
+          <p>
+            Clutter experiments involved tasks like grasping round objects and retrieving items for specific uses. Each test case was run 15 times, measured by Task Success Rate and Motion Number.
+          </p>
+          <figure>
+            <img src="./static/images/heavycluttersimulation.png" alt="Heavy Clutter Simulation">
+            <figcaption>Figure 2: Heavy clutter simulation.</figcaption>
+          </figure>
+          <p>
+            In heavy clutter scenarios, our system handled up to 30 unseen objects with up to 50 action attempts per run.
+          </p>
+          <figure>
+            <img src="./static/images/simualtion_results.png" alt="Simulation Results">
+            <figcaption>Figure 3: Simulation results summary.</figcaption>
+          </figure>
+          <p>
+            Our system significantly outperformed baselines in overall success rates and efficiency metrics, achieving an average success rate of 0.980, an average step count of 3.39, and an average success step count of 3.32 in clutter cases.
+          </p>
+          <p>
+            Ablation studies demonstrated the effectiveness of our system components. Different configurations showed the importance of each part in enhancing overall performance.
+          </p>
+          <figure>
+            <img src="./static/images/real-robot-tests.png" alt="Real Robot Tests">
+            <figcaption>Figure 4: Real robot tests setup.</figcaption>
+          </figure>
+          <p>
+            We extended our system to real-world environments using a UR5 robotic arm, Robotiq 85 gripper, and RealSense D455 camera. Observations were processed using MoveIt and ROS on a workstation with a 12GB 2080Ti GPU. Our model, deployed via Flask on dual 3090 GPUs, provided grasp pose predictions within 10 seconds via the GPT-4o API.
+          </p>
+          <p>
+            Real-world experiments showed that our system outperformed VL-Grasp, confirming the improvements introduced by our strategic part grasping and heavy clutter handling mechanisms.
+          </p>
+          <figure>
+            <img src="./static/images/real-robot-results.png" alt="Real Robot Results">
+            <figcaption>Figure 5: Real robot results summary.</figcaption>
+          </figure>
+          <p>
+            Our results indicate a high success rate in identifying and grasping target objects, even in cluttered environments. Failures were primarily due to single image data limitations, low-quality grasp poses from the downstream model, and variations in UR5 robot stability. Improving these factors is crucial for further enhancing system performance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- <section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <center>
+      <video id="teaser" autoplay controls muted loop playsinline width="85%" height="85%">
+        <source src="./static/videos/imagination-policy-real-robot-revise-1080p_compressed.mp4"
+                type="video/mp4">
+      </video>
+    </center>
+      <h3 class="subtitle has-text-centered">
+        video of real robot experiments (trained with 10 demos)
+      </h3>
+    </div>
+  </div>
+</section> -->
+
+<!-- <section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h3 class="title">Citation</h3>
+    <pre><code>
+      @article{
+        huang2024imagination,
+        title={Imagination Policy: Using Generative Point Cloud Models for Learning Manipulation Policies},
+        author={Haojie Huang and Karl Schmeckpeper and Dian Wang and Ondrej Biza and Yaoyao Qian and Haotian Liu and Mingxi Jia and Robert Platt and Robin Walters},
+        journal={arXiv preprint arXiv:2406.11740},
+        year={2024},}
+    </code></pre>
+  </div>
+</section> -->
+
+
+
+
+<footer class="footer">
+  <div class="container">
+
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website design borrowed from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
